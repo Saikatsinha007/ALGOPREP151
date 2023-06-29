@@ -14,23 +14,18 @@ class Solution {
                 max = nums[i];
 					}
 				
-            
             if(nums[i] == max) {
 				
                 count++;
-				
-            } 
-            
-        else {
+		 } 
+     else {
 					
             count--;
-					
-        
-            }
-			
-        
-           }
-
-	return max;
+			 }
+			}
+    return max;
     }
-}
+}				
+        
+           
+           
