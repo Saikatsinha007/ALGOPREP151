@@ -28,11 +28,13 @@ class Solution {
                
                     maxRight = height[right];
               
-                else
-              
-                    water += maxRight - height[right];
+                else{water += maxRight - height[right];}
               
                 right --;
+                    
+                    
+              
+                    
            }
        }
       
