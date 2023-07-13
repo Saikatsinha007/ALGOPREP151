@@ -1,0 +1,23 @@
+class Solution {
+    public int leastBricks(List<List<Integer>> wall) {
+       Map<Integer, Integer> countMap = new HashMap<>();
+        
+        for (List<Integer> row : wall) {
+            int position = 0;
+            for (int i = 0; i < row.size() - 1; i++) {
+                position += row.get(i); // Increment the position by the brick width
+                
+                // Update the count for the current position
+                countMap.put(position, countMap.getOrDefault(position, 0) + 1);
+            }
+        }
+        
+        int maxCount = 0;
+        for (int count : countMap.values()) {
+            maxCount = Math.max(maxCount, count);
+        }
+        
+        // The minimum number of crossed bricks is the total number of rows minus the maximum count
+        return wall.size() - maxCount;  
+    }
+}
