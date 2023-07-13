@@ -1,0 +1,35 @@
+class Solution {
+    public final int[][] dirs = new int [][]{{0,0},{-1,0},{-1,1},{-1,-1},{0,1},{0,-1},{1,0},{1,1},{1,-1}};
+        public int[] gridIllumination(int n, int[][] lamps, int[][] queries) {
+            Map<Integer, Integer> row = new HashMap(), col = new HashMap(), diagRD = new HashMap() , diagLD = new HashMap(); 
+            Map<Long,Integer> lampLocations = new HashMap();
+            boolean[] turendOff = new boolean[lamps.length];
+            for (int i = 0 ; i < lamps.length; i++){
+                int lamp[] = lamps[i] , rightDown = lamp[1] - lamp[0], leftDown =  lamp[1] + lamp[0]; // diags shifted to row 0 intersection always
+                if (lampLocations.containsKey((((long)lamp[0] + 1) << 32) + lamp[1])) continue; // already present, for testcase with 2 at the same location
+                row.put(lamp[0], row.getOrDefault(lamp[0], 0) + 1);
+                col.put(lamp[1], col.getOrDefault(lamp[1], 0) + 1);
+                diagRD.put(rightDown, diagRD.getOrDefault(rightDown, 0) + 1);
+                diagLD.put(leftDown , diagLD.getOrDefault(leftDown, 0) + 1);
+                lampLocations.put((((long)lamp[0] + 1) << 32) + lamp[1], i);
+            }    
+            int [] ans = new int[queries.length];
+            for (int i = 0 ; i < queries.length; i++){          
+                int q[] = queries[i] , rightDown = q[1] - q[0], leftDown =  q[1] + q[0]; 
+                ans [i] = (row.getOrDefault(q[0],0) > 0 || col.getOrDefault(q[1],0) > 0 || diagRD.getOrDefault(rightDown,0) > 0 || diagLD.getOrDefault(leftDown,0) > 0) ? 1 : 0;
+                for (int dir[] : dirs){
+                    int newI = q[0] + dir[0], newJ =  q[1] + dir[1] ;
+                    long lampKey = (((long)newI  + 1) << 32) + newJ;
+                    if (newI >= 0 && newI <n && newJ >= 0 && newJ <n && lampLocations.containsKey(lampKey) && (!turendOff[lampLocations.get(lampKey)])) {
+                        turendOff[lampLocations.get(lampKey)] = true;
+                        int newRightDown = newJ -newI, newLeftDown =  newJ + newI;
+                        row.put(newI, row.get(newI) - 1);
+                        col.put(newJ, col.get(newJ) - 1);
+                        diagRD.put(newRightDown, diagRD.get(newRightDown) - 1);
+                        diagLD.put(newLeftDown , diagLD.get(newLeftDown) - 1);
+                    }
+                }
+            }
+            return ans;
+        }
+}
