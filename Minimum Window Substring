@@ -1,0 +1,50 @@
+class Solution {
+    public String minWindow(String s, String t) {
+      Map<Character, Integer> targetFreq = new HashMap<>();
+        Map<Character, Integer> windowFreq = new HashMap<>();
+
+        for (char c : t.toCharArray()) {
+            targetFreq.put(c, targetFreq.getOrDefault(c, 0) + 1);
+        }
+
+        int left = 0;
+        int right = 0;
+        int minWindowStart = 0;
+        int minWindowLength = s.length() + 1;
+        int matchCount = 0;
+
+        while (right < s.length()) {
+            char currentChar = s.charAt(right);
+            windowFreq.put(currentChar, windowFreq.getOrDefault(currentChar, 0) + 1);
+
+            if (windowFreq.getOrDefault(currentChar, 0) <= targetFreq.getOrDefault(currentChar, 0)) {
+                matchCount++;
+            }
+
+            while (matchCount == t.length()) {
+                if (right - left + 1 < minWindowLength) {
+                    minWindowStart = left;
+                    minWindowLength = right - left + 1;
+                }
+
+                char leftChar = s.charAt(left);
+                windowFreq.put(leftChar, windowFreq.get(leftChar) - 1);
+
+                if (windowFreq.get(leftChar) < targetFreq.getOrDefault(leftChar, 0)) {
+                    matchCount--;
+                }
+
+                left++;
+            }
+
+            right++;
+        }  
+
+         if (minWindowLength > s.length()) {
+            return "";
+        }
+
+        return s.substring(minWindowStart, minWindowStart + minWindowLength);
+     
+    }
+}
