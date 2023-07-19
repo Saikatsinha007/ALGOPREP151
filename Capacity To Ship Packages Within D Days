@@ -1,0 +1,53 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        int left = getMaxWeight(weights); // Minimum capacity should be at least the maximum weight of a single package
+        int right = getSum(weights); // Maximum capacity should be at most the sum of all weights
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int requiredDays = calculateDays(weights, mid);
+            
+            if (requiredDays <= days) {
+                // The capacity is enough, so we try to find a smaller capacity
+                right = mid;
+            } else {
+                // The capacity is not enough, so we need to increase the capacity
+                left = mid + 1;
+            }
+        }
+        
+        return left;
+    }
+    
+    private int getMaxWeight(int[] weights) {
+        int maxWeight = Integer.MIN_VALUE;
+        for (int weight : weights) {
+            maxWeight = Math.max(maxWeight, weight);
+        }
+        return maxWeight;
+    }
+    
+    private int getSum(int[] weights) {
+        int sum = 0;
+        for (int weight : weights) {
+            sum += weight;
+        }
+        return sum;
+    }
+    
+    private int calculateDays(int[] weights, int capacity) {
+        int days = 1;
+        int currentLoad = 0;
+        
+        for (int weight : weights) {
+            currentLoad += weight;
+            if (currentLoad > capacity) {
+                // We need to load on the next day
+                days++;
+                currentLoad = weight;
+            }
+        }
+        
+        return days;  
+    }
+}
