@@ -12,18 +12,22 @@ class Solution{
     {
         //Your Code Here
         
-         sort(A,A+n);
-        for(int i=n-1;i>=2;i--)
-        {
-            int l=0,r=i-1;
+        sort(A,A+n);
+        
+        for(int i = n-1;i>2;i--){
             
-            while(l<r)
-            {
-                if(A[i]+A[r]+A[l]==X) return 1;
-                else if(A[i]+A[r]+A[l]>X) r--;
-                else l++;
+            int l =0, r = i-1;
+            
+            while(l<r){
+                
+                if(A[i]+ A[l] +A[r] == X)return 1;
+                else if(A[i]+ A[l] +A[r] > X) r--;
+                else{
+                    l++;
+                }
             }
         }
+        
         return 0;
     }
 
